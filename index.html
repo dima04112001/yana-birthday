@@ -54,6 +54,11 @@
       to { opacity: 1; transform: translateX(0); }
     }
 
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
     .petal {
       position: fixed;
       pointer-events: none;
@@ -71,14 +76,8 @@
     }
 
     .envelope-container:hover { transform: scale(1.1); }
-
     .envelope-container.opening {
       animation: envelopeOpen 0.8s ease forwards;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.04); }
     }
 
     h1, h2 {
@@ -163,6 +162,7 @@
     }
 
     .nav-btn:hover { background: rgba(255, 255, 255, 0.9); }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
 
     .music-btn {
       position: fixed;
@@ -181,6 +181,41 @@
 
     .music-btn:hover { transform: scale(1.1); }
     .music-btn.playing { background: #ffe4c4; }
+
+    .wheel {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: conic-gradient(#f8e1c4, #d4845a, #b85c38, #f0c78e, #e8b88a, #d4845a);
+      margin: 0 auto 24px;
+      box-shadow: 0 8px 32px rgba(184, 92, 56, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+    }
+
+    .wheel-center {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .prediction-box {
+      margin-top: 24px;
+      padding: 20px 24px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 16px;
+      animation: fadeIn 0.8s ease;
+      box-shadow: 0 4px 16px rgba(184, 92, 56, 0.15);
+    }
   </style>
 </head>
 <body>
@@ -190,42 +225,113 @@
 <script type="text/babel">
   const { useState, useEffect, useRef } = React;
 
-  // ⚠️ ЗАМЕНИ ЭТУ ССЫЛКУ НА РЕАЛЬНУЮ ССЫЛКУ НА СЕРТИФИКАТ ⚠️
+  // ⚠️ ВСТАВЬ СЮДА РЕАЛЬНУЮ ССЫЛКУ НА СЕРТИФИКАТ ⚠️
   const GIFT_URL = "https://goldapple.ru/ТВОЙ-СЕРТИФИКАТ";
 
-  // Фото (загрузи их в репозиторий и назови photo1.jpg, photo2.jpg и т.д.)
   const PHOTOS = [
-    { src: "photo1.jpg", caption: "Твоя улыбка здесь прекрасна" },
-    { src: "photo2.jpg", caption: "Здесь мы были вместе, надеюсь поедем ещё " },
-    { src: "photo3.jpg", caption: "А это моя любимая твоя фотография, такая тут важная" },
-    { src: "photo4.jpg", caption: "А здесь монетку ищещь, но всё равно очень красивая" },
-    { src: "photo5.jpg", caption: "Ну какой красивый взгляд 👀" },
-    { src: "photo6.jpg", caption: "Улыбайся почаще, тебе очень идёт" },
+    { src: "photo1.jpg", caption: "Твоя улыбка здесь — лучшее" },
+    { src: "photo2.jpg", caption: "Этот день был особенным" },
+    { src: "photo3.jpg", caption: "Помню, как мы смеялись" },
+    { src: "photo4.jpg", caption: "Ты сияешь" },
+    { src: "photo5.jpg", caption: "Один из тех тёплых дней" },
+    { src: "photo6.jpg", caption: "Здесь ты особенно красива" },
   ];
 
-  // Комплименты (случайные при каждом открытии)
   const ALL_COMPLIMENTS = [
-    "Ты — как солнечный луч в пасмурный день ☀️",
-    "Твоя энергия заряжает всех вокруг",
-    "Ты делаешь этот мир ярче просто тем, что ты есть",
-    "Твой смех — лучшее лекарство от всего",
-    "Ты невероятно сильная и вдохновляешь",
-    "С тобой всегда легко и тепло",
-    "Ты — человек, с которым хочется дружить вечно",
-    "Твоя доброта не знает границ",
-    "Ты умеешь слушать, как никто другой",
-    "Ты достойна самого лучшего — всегда",
-    "Ты особенная, и это видно сразу",
-    "Ты приносишь удачу одним своим присутствием",
+    "Ты — как будто солнце решило стать человеком ☀️",
+    "Рядом с тобой даже воздух теплее",
+    "Ты делаешь этот мир родным и уютным",
+    "Твой смех — это звук, от которого всё внутри улыбается",
+    "Ты сильная, но при этом такая настоящая и живая",
+    "С тобой можно быть собой — и это бесценно",
+    "Ты — тот человек, с которым душа отдыхает",
+    "Твоя доброта обволакивает, как мягкий плед",
+    "Ты слышишь не слова — ты слышишь сердце",
+    "Ты заслуживаешь всего самого светлого — и даже больше",
+    "Ты особенная, и не потому что лучше всех, а потому что ты — это ты",
+    "Ты приносишь счастье просто тем, что ты рядом",
+    "С тобой можно молчать, и это будет самый тёплый разговор",
+    "Ты умеешь превращать обычные дни в маленькие праздники души 🎉",
+    "Твои мысли и мечты — они настоящие, и это вдохновляет",
+    "Ты — как чашка горячего чая, когда на улице дождь, а внутри уют 🍵",
+    "Ты не боишься быть уязвимой, и в этом твоя сила",
+    "Ты поддерживаешь так, будто обнимаешь словами",
+    "Ты — человек, на которого можно опереться в любой шторм",
+    "С тобой любое приключение становится тёплым воспоминанием",
+    "Ты — как глоток свежего воздуха после долгого дня, только нежного 🌿",
+    "Ты щедрая душой — и это дороже любых подарков",
+    "Ты делаешь мир красивее одним своим присутствием",
+    "Ты — причина, по которой хочется верить в хорошее",
+    "Ты излучаешь спокойствие, в котором хочется остаться",
+    "Ты — тот самый друг, которого судьба дарит не каждому",
+    "Ты даже не представляешь, как много ты значишь для тех, кто тебя знает",
+    "Ты умеешь прощать так, будто заново даришь крылья",
+    "Ты — как звезда, которая горит даже в самую тёмную ночь 🌟",
+    "Ты всегда находишь нужные слова, и они ложатся прямо в сердце",
+    "Ты вдохновляешь не громкими делами, а тем, как ты живёшь каждый день",
+    "Ты — человек, которого хочется обнять мысленно и никогда не отпускать",
   ];
 
-  // Выбираем 3 случайных комплимента при загрузке
+  const PREDICTIONS = [
+    "Этот год принесёт тебе неожиданную встречу, которая всё изменит",
+    "Ты окажешься в нужном месте в нужное время — доверься судьбе",
+    "Тебя ждёт успех в том, о чём ты давно мечтала",
+    "Кто-то из прошлого вернётся с важными словами",
+    "Ты откроешь в себе талант, о котором не подозревала",
+    "Путешествие, о котором ты даже не думала, станет реальностью",
+    "Финансовая удача будет на твоей стороне этой осенью",
+    "Ты примешь смелое решение — и не пожалеешь",
+    "Весной случится то, что заставит тебя улыбаться каждый день",
+    "Ты получишь предложение, от которого невозможно отказаться",
+    "Новый человек войдёт в твою жизнь и станет важной её частью",
+    "Ты наконец-то завершишь то, что давно откладывала",
+    "Июль принесёт тебе судьбоносную новость",
+    "Ты обретёшь гармонию в том, что сейчас кажется хаосом",
+    "Твоя цель станет ближе, чем ты думаешь",
+    "Ты найдёшь ответ на вопрос, который мучает тебя давно",
+    "Ты встретишь свою удачу там, где меньше всего ждёшь",
+    "Твоя доброта вернётся к тебе сторицей",
+    "Звёзды говорят: ты на правильном пути",
+    "Этот год — твой. Просто поверь в это",
+  ];
+
   const getRandomCompliments = () => {
     const shuffled = [...ALL_COMPLIMENTS].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, 3);
   };
 
   const PETALS = ["🌸", "🌷", "💐", "🌺", "🌼", "🌻", "✨"];
+
+  function Typewriter({ text, speed = 50 }) {
+    const [displayedText, setDisplayedText] = useState("");
+    const [cursor, setCursor] = useState(true);
+
+    useEffect(() => {
+      let index = 0;
+      setDisplayedText("");
+      const timer = setInterval(() => {
+        if (index < text.length) {
+          setDisplayedText(text.slice(0, index + 1));
+          index++;
+        } else {
+          clearInterval(timer);
+        }
+      }, speed);
+      return () => clearInterval(timer);
+    }, [text, speed]);
+
+    useEffect(() => {
+      const cursorTimer = setInterval(() => setCursor(c => !c), 500);
+      return () => clearInterval(cursorTimer);
+    }, []);
+
+    return (
+      <p className="subtitle" style={{ fontStyle: 'italic', minHeight: 80 }}>
+        {displayedText}
+        <span style={{ opacity: cursor ? 1 : 0, color: '#b85c38', fontWeight: 'bold', transition: 'opacity 0.1s' }}>|</span>
+      </p>
+    );
+  }
 
   function App() {
     const [page, setPage] = useState(0);
@@ -236,16 +342,17 @@
     const [petals, setPetals] = useState([]);
     const [musicPlaying, setMusicPlaying] = useState(false);
     const [compliments] = useState(getRandomCompliments());
+    const [spinning, setSpinning] = useState(false);
+    const [prediction, setPrediction] = useState(null);
+    const [rotation, setRotation] = useState(0);
     const audioRef = useRef(null);
 
-    // Инициализация аудио
     useEffect(() => {
       audioRef.current = new Audio("music.mp3");
       audioRef.current.loop = true;
       audioRef.current.volume = 0.4;
     }, []);
 
-    // Лепестки
     useEffect(() => {
       const interval = setInterval(() => {
         if (petals.length < 20) {
@@ -256,15 +363,12 @@
             char: PETALS[Math.floor(Math.random() * PETALS.length)],
           };
           setPetals(p => [...p, newPetal]);
-          setTimeout(() => {
-            setPetals(p => p.filter(x => x.id !== newPetal.id));
-          }, 4000);
+          setTimeout(() => setPetals(p => p.filter(x => x.id !== newPetal.id)), 4000);
         }
       }, 600);
       return () => clearInterval(interval);
     }, [petals.length]);
 
-    // Постепенное появление комплиментов на странице 2
     useEffect(() => {
       if (page === 1 && showText) {
         const timers = [
@@ -277,7 +381,6 @@
     }, [page, showText]);
 
     function handleEnvelopeClick() {
-      // Включаем музыку
       if (audioRef.current) {
         audioRef.current.play().catch(() => {});
         setMusicPlaying(true);
@@ -298,16 +401,30 @@
       }
     }
 
+    function spinWheel() {
+      if (spinning) return;
+      setSpinning(true);
+      setPrediction(null);
+
+      const spins = 5 + Math.floor(Math.random() * 5);
+      const extraDegrees = Math.floor(Math.random() * 360);
+      const totalRotation = rotation + spins * 360 + extraDegrees;
+
+      setRotation(totalRotation);
+
+      setTimeout(() => {
+        const random = PREDICTIONS[Math.floor(Math.random() * PREDICTIONS.length)];
+        setPrediction(random);
+        setSpinning(false);
+      }, 3000);
+    }
+
     return (
       <div className="container">
-        {/* Летающие лепестки */}
         {petals.map(p => (
-          <div key={p.id} className="petal" style={{ left: p.x, top: p.y }}>
-            {p.char}
-          </div>
+          <div key={p.id} className="petal" style={{ left: p.x, top: p.y }}>{p.char}</div>
         ))}
 
-        {/* Кнопка музыки */}
         <button className={`music-btn ${musicPlaying ? 'playing' : ''}`} onClick={toggleMusic}>
           {musicPlaying ? '🔊' : '🔈'}
         </button>
@@ -327,36 +444,23 @@
           </div>
         )}
 
-        {/* СТРАНИЦА 1 — Поздравление + комплименты */}
+        {/* СТРАНИЦА 1 — Поздравление */}
         {page === 1 && (
           <div className="card">
             <h1 style={{ fontSize: 32, marginBottom: 12 }}>
               Яна, с днём рождения! 🎂
             </h1>
-            <p className="subtitle">
-              Пусть этот день будет таким же<br />
-              тёплым и светлым, как ты сама.<br />
-              Желаю тебе счастья, удачи<br />
-              и только хороших людей вокруг.
-            </p>
-
-            {/* Комплименты (появляются по очереди) */}
-            {showCompliments[0] && (
-              <p className="compliment" style={{ animationDelay: "0s" }}>
-                {compliments[0]}
-              </p>
+            <Typewriter
+              text="Пусть этот день будет таким же тёплым и светлым, как ты сама. Желаю тебе счастья, удачи и только хороших людей вокруг."
+              speed={40}
+            />
+            {showText && (
+              <>
+                {showCompliments[0] && <p className="compliment">{compliments[0]}</p>}
+                {showCompliments[1] && <p className="compliment">{compliments[1]}</p>}
+                {showCompliments[2] && <p className="compliment">{compliments[2]}</p>}
+              </>
             )}
-            {showCompliments[1] && (
-              <p className="compliment" style={{ animationDelay: "0s" }}>
-                {compliments[1]}
-              </p>
-            )}
-            {showCompliments[2] && (
-              <p className="compliment" style={{ animationDelay: "0s" }}>
-                {compliments[2]}
-              </p>
-            )}
-
             <button
               className="nav-btn"
               onClick={() => { setPage(2); setShowCompliments([true, true, true]); }}
@@ -370,74 +474,71 @@
         {/* СТРАНИЦА 2 — Галерея фото */}
         {page === 2 && (
           <div className="card">
-            <h2 style={{ fontSize: 26, marginBottom: 16 }}>
-              Как прошёл этот год
-            </h2>
+            <h2 style={{ fontSize: 26, marginBottom: 16 }}>Как прошёл этот год</h2>
             <div className="photo-card">
               <img src={PHOTOS[photoIndex].src} alt="Фото" />
               <p className="photo-caption">{PHOTOS[photoIndex].caption}</p>
             </div>
-
             <div style={{ display: "flex", gap: 20, justifyContent: "center", marginTop: 16 }}>
-              <button
-                className="nav-btn"
-                onClick={() => setPhotoIndex(Math.max(0, photoIndex - 1))}
-                disabled={photoIndex === 0}
-                style={{ opacity: photoIndex === 0 ? 0.3 : 1 }}
-              >
-                ←
-              </button>
-              <span style={{ color: '#8b5e3c', padding: '8px 0' }}>
-                {photoIndex + 1} / {PHOTOS.length}
-              </span>
-              <button
-                className="nav-btn"
-                onClick={() => setPhotoIndex(Math.min(PHOTOS.length - 1, photoIndex + 1))}
-                disabled={photoIndex === PHOTOS.length - 1}
-                style={{ opacity: photoIndex === PHOTOS.length - 1 ? 0.3 : 1 }}
-              >
-                →
-              </button>
+              <button className="nav-btn" onClick={() => setPhotoIndex(Math.max(0, photoIndex - 1))} disabled={photoIndex === 0}>←</button>
+              <span style={{ color: '#8b5e3c', padding: '8px 0' }}>{photoIndex + 1} / {PHOTOS.length}</span>
+              <button className="nav-btn" onClick={() => setPhotoIndex(Math.min(PHOTOS.length - 1, photoIndex + 1))} disabled={photoIndex === PHOTOS.length - 1}>→</button>
+            </div>
+            <button className="nav-btn" onClick={() => setPage(3)} style={{ marginTop: 20, fontSize: 18, padding: '12px 28px' }}>Дальше →</button>
+          </div>
+        )}
+
+        {/* СТРАНИЦА 3 — Колесо предсказаний */}
+        {page === 3 && (
+          <div className="card">
+            <h2 style={{ fontSize: 26, marginBottom: 8 }}>Колесо предсказаний 🔮</h2>
+            <p className="subtitle" style={{ marginBottom: 24 }}>
+              Вселенная знает, что тебя ждёт...
+            </p>
+
+            <div
+              className="wheel"
+              onClick={spinWheel}
+              style={{
+                cursor: spinning ? "default" : "pointer",
+                transform: `rotate(${rotation}deg)`,
+              }}
+            >
+              <div className="wheel-center">🔮</div>
             </div>
 
-            <button
-              className="nav-btn"
-              onClick={() => setPage(3)}
-              style={{ marginTop: 20, fontSize: 18, padding: '12px 28px' }}
-            >
+            <p style={{ color: "#8b5e3c", fontSize: 14, marginBottom: 8 }}>
+              {spinning ? "Вселенная думает..." : "Нажми на колесо, чтобы узнать судьбу"}
+            </p>
+
+            {prediction && !spinning && (
+              <div className="prediction-box">
+                <p style={{ fontSize: 16, color: "#6b3a2a", fontStyle: "italic", lineHeight: 1.5 }}>
+                  ✨ {prediction} ✨
+                </p>
+              </div>
+            )}
+
+            {prediction && !spinning && (
+              <button className="nav-btn" onClick={spinWheel} style={{ marginTop: 16, fontSize: 16, padding: '10px 24px' }}>
+                🔄 Крутить ещё раз
+              </button>
+            )}
+
+            <button className="nav-btn" onClick={() => setPage(4)} style={{ marginTop: 20, fontSize: 18, padding: '12px 28px' }}>
               Дальше →
             </button>
           </div>
         )}
 
-        {/* СТРАНИЦА 3 — Подарок */}
-        {page === 3 && (
+        {/* СТРАНИЦА 4 — Подарок */}
+        {page === 4 && (
           <div className="card">
-            <h2 style={{ fontSize: 28, marginBottom: 12 }}>
-              Твой подарок 🎁
-            </h2>
-            <p className="subtitle" style={{ marginBottom: 24 }}>
-              Маленький сюрприз для тебя
-            </p>
-
-            <img
-              src="qr.png"
-              alt="QR-код"
-              style={{
-                width: 200,
-                height: 200,
-                borderRadius: 16,
-                boxShadow: "0 8px 24px rgba(0,0,0,0.1)"
-              }}
-            />
-
-            <p style={{ color: '#8b5e3c', marginTop: 16, fontSize: 14 }}>
-              Отсканируй или нажми на кнопку ниже
-            </p>
-
-            <a href={GIFT_URL} target="_blank" className="gift-btn">
-              🎁 Открыть подарок
-            </a>
+            <h2 style={{ fontSize: 28, marginBottom: 12 }}>Твой подарок 🎁</h2>
+            <p className="subtitle" style={{ marginBottom: 24 }}>Маленький сюрприз для тебя</p>
+            <img src="qr.png" alt="QR-код" style={{ width: 200, height: 200, borderRadius: 16, boxShadow: "0 8px 24px rgba(0,0,0,0.1)" }} />
+            <p style={{ color: '#8b5e3c', marginTop: 16, fontSize: 14 }}>Отсканируй или нажми на кнопку ниже</p>
+            <a href={GIFT_URL} target="_blank" className="gift-btn">🎁 Открыть подарок</a>
           </div>
         )}
       </div>
