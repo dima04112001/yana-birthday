@@ -59,6 +59,12 @@
       50% { transform: scale(1.04); }
     }
 
+    @keyframes grow {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
     .petal {
       position: fixed;
       pointer-events: none;
@@ -186,7 +192,8 @@
       width: 200px;
       height: 200px;
       border-radius: 50%;
-      background: conic-gradient(#f8e1c4, #d4845a, #b85c38, #f0c78e, #e8b88a, #d4845a);
+      background: #f8e1c4;
+      border: 6px solid #d4845a;
       margin: 0 auto 24px;
       box-shadow: 0 8px 32px rgba(184, 92, 56, 0.3);
       display: flex;
@@ -206,6 +213,12 @@
       justify-content: center;
       font-size: 28px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+
+    .wheel-emoji {
+      position: absolute;
+      font-size: 20px;
     }
 
     .prediction-box {
@@ -215,6 +228,54 @@
       border-radius: 16px;
       animation: fadeIn 0.8s ease;
       box-shadow: 0 4px 16px rgba(184, 92, 56, 0.15);
+    }
+
+    /* Огород */
+    .garden-bed {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+    .garden-plot {
+      width: 55px;
+      height: 55px;
+      border-radius: 12px;
+      background: #8B6914;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .garden-plot:hover {
+      transform: scale(1.1);
+      background: #6B4F12;
+    }
+
+    .garden-plot.planted {
+      cursor: default;
+      background: #5C8A3C;
+    }
+
+    .garden-plot.planted:hover {
+      transform: scale(1);
+    }
+
+    .garden-veg {
+      animation: grow 0.6s ease;
+    }
+
+    .harvest-counter {
+      color: #5C8A3C;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 12px 0;
     }
   </style>
 </head>
@@ -295,6 +356,8 @@
     "Этот год — твой. Просто поверь в это",
   ];
 
+  const VEGETABLES = ["🥕", "🌽", "🍅", "🥒", "🧅", "🧄", "🍆", "🥬"];
+
   const getRandomCompliments = () => {
     const shuffled = [...ALL_COMPLIMENTS].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, 3);
@@ -345,6 +408,9 @@
     const [spinning, setSpinning] = useState(false);
     const [prediction, setPrediction] = useState(null);
     const [rotation, setRotation] = useState(0);
+    const [garden, setGarden] = useState(Array(6).fill(null));
+    const [harvestCount, setHarvestCount] = useState(0);
+    const [gardenComplete, setGardenComplete] = useState(false);
     const audioRef = useRef(null);
 
     useEffect(() => {
@@ -417,6 +483,22 @@
         setPrediction(random);
         setSpinning(false);
       }, 3000);
+    }
+
+    function plantVegetable(index) {
+      if (garden[index] !== null || gardenComplete) return;
+
+      const newGarden = [...garden];
+      const randomVeg = VEGETABLES[Math.floor(Math.random() * VEGETABLES.length)];
+      newGarden[index] = randomVeg;
+      setGarden(newGarden);
+
+      const newCount = harvestCount + 1;
+      setHarvestCount(newCount);
+
+      if (newCount >= 6) {
+        setGardenComplete(true);
+      }
     }
 
     return (
@@ -504,6 +586,13 @@
                 transform: `rotate(${rotation}deg)`,
               }}
             >
+              {["⭐", "🌟", "💫", "✨", "🔮", "🪐", "🌙", "☀️"].map((emoji, i) => (
+                <span key={i} className="wheel-emoji" style={{
+                  transform: `rotate(${i * 45}deg) translateY(-75px)`,
+                }}>
+                  {emoji}
+                </span>
+              ))}
               <div className="wheel-center">🔮</div>
             </div>
 
@@ -531,8 +620,54 @@
           </div>
         )}
 
-        {/* СТРАНИЦА 4 — Подарок */}
+        {/* СТРАНИЦА 4 — Мини-огород */}
         {page === 4 && (
+          <div className="card">
+            <h2 style={{ fontSize: 26, marginBottom: 8 }}>Посади свой урожай 🌱</h2>
+            <p className="subtitle" style={{ marginBottom: 24 }}>
+              Яна, посади овощи и собери урожай!
+            </p>
+
+            <div className="garden-bed">
+              {garden.map((veg, i) => (
+                <div
+                  key={i}
+                  className={`garden-plot ${veg ? 'planted' : ''}`}
+                  onClick={() => plantVegetable(i)}
+                >
+                  {veg ? (
+                    <span className="garden-veg">{veg}</span>
+                  ) : (
+                    "🟫"
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <p className="harvest-counter">
+              {gardenComplete 
+                ? "🏆 Урожай собран! Ты настоящий агроном!" 
+                : `Собрано: ${harvestCount}/6 🌾`
+              }
+            </p>
+
+            {gardenComplete && (
+              <div className="prediction-box" style={{ marginTop: 16 }}>
+                <p style={{ fontSize: 16, color: "#6b3a2a", fontStyle: "italic", lineHeight: 1.5 }}>
+                  Даже в день рождения ты думаешь об урожае! 😄<br/>
+                  С таким агрономом никакой голод не страшен! 🌱🏆
+                </p>
+              </div>
+            )}
+
+            <button className="nav-btn" onClick={() => setPage(5)} style={{ marginTop: 20, fontSize: 18, padding: '12px 28px' }}>
+              Дальше →
+            </button>
+          </div>
+        )}
+
+        {/* СТРАНИЦА 5 — Подарок */}
+        {page === 5 && (
           <div className="card">
             <h2 style={{ fontSize: 28, marginBottom: 12 }}>Твой подарок 🎁</h2>
             <p className="subtitle" style={{ marginBottom: 24 }}>Маленький сюрприз для тебя</p>
