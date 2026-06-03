@@ -159,8 +159,8 @@
       background: rgba(255, 255, 255, 0.6);
       border: none;
       color: #b85c38;
-      font-size: 24px;
-      padding: 8px 16px;
+      font-size: 16px;
+      padding: 10px 22px;
       border-radius: 20px;
       cursor: pointer;
       transition: background 0.2s;
@@ -230,7 +230,6 @@
       box-shadow: 0 4px 16px rgba(184, 92, 56, 0.15);
     }
 
-    /* Огород */
     .garden-bed {
       display: flex;
       gap: 10px;
@@ -277,6 +276,13 @@
       font-weight: bold;
       margin: 12px 0;
     }
+
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+    }
   </style>
 </head>
 <body>
@@ -286,7 +292,6 @@
 <script type="text/babel">
   const { useState, useEffect, useRef } = React;
 
-  // ⚠️ ВСТАВЬ СЮДА РЕАЛЬНУЮ ССЫЛКУ НА СЕРТИФИКАТ ⚠️
   const GIFT_URL = "https://goldapple.ru/ТВОЙ-СЕРТИФИКАТ";
 
   const PHOTOS = [
@@ -543,13 +548,10 @@
                 {showCompliments[2] && <p className="compliment">{compliments[2]}</p>}
               </>
             )}
-            <button
-              className="nav-btn"
-              onClick={() => { setPage(2); setShowCompliments([true, true, true]); }}
-              style={{ marginTop: 24, fontSize: 18, padding: '12px 28px' }}
-            >
-              Дальше →
-            </button>
+            <div className="nav-buttons">
+              <button className="nav-btn" onClick={() => setPage(0)}>← Назад</button>
+              <button className="nav-btn" onClick={() => { setPage(2); setShowCompliments([true, true, true]); }}>Дальше →</button>
+            </div>
           </div>
         )}
 
@@ -566,7 +568,10 @@
               <span style={{ color: '#8b5e3c', padding: '8px 0' }}>{photoIndex + 1} / {PHOTOS.length}</span>
               <button className="nav-btn" onClick={() => setPhotoIndex(Math.min(PHOTOS.length - 1, photoIndex + 1))} disabled={photoIndex === PHOTOS.length - 1}>→</button>
             </div>
-            <button className="nav-btn" onClick={() => setPage(3)} style={{ marginTop: 20, fontSize: 18, padding: '12px 28px' }}>Дальше →</button>
+            <div className="nav-buttons">
+              <button className="nav-btn" onClick={() => setPage(1)}>← Назад</button>
+              <button className="nav-btn" onClick={() => setPage(3)}>Дальше →</button>
+            </div>
           </div>
         )}
 
@@ -614,9 +619,10 @@
               </button>
             )}
 
-            <button className="nav-btn" onClick={() => setPage(4)} style={{ marginTop: 20, fontSize: 18, padding: '12px 28px' }}>
-              Дальше →
-            </button>
+            <div className="nav-buttons">
+              <button className="nav-btn" onClick={() => setPage(2)}>← Назад</button>
+              <button className="nav-btn" onClick={() => setPage(4)}>Дальше →</button>
+            </div>
           </div>
         )}
 
@@ -660,9 +666,10 @@
               </div>
             )}
 
-            <button className="nav-btn" onClick={() => setPage(5)} style={{ marginTop: 20, fontSize: 18, padding: '12px 28px' }}>
-              Дальше →
-            </button>
+            <div className="nav-buttons">
+              <button className="nav-btn" onClick={() => setPage(3)}>← Назад</button>
+              <button className="nav-btn" onClick={() => setPage(5)}>Дальше →</button>
+            </div>
           </div>
         )}
 
@@ -674,6 +681,9 @@
             <img src="qr.png" alt="QR-код" style={{ width: 200, height: 200, borderRadius: 16, boxShadow: "0 8px 24px rgba(0,0,0,0.1)" }} />
             <p style={{ color: '#8b5e3c', marginTop: 16, fontSize: 14 }}>Отсканируй или нажми на кнопку ниже</p>
             <a href={GIFT_URL} target="_blank" className="gift-btn">🎁 Открыть подарок</a>
+            <div className="nav-buttons" style={{ marginTop: 20 }}>
+              <button className="nav-btn" onClick={() => setPage(4)}>← Назад</button>
+            </div>
           </div>
         )}
       </div>
