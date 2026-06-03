@@ -673,18 +673,46 @@
         )}
 
         {/* СТРАНИЦА 5 — Подарок */}
-        {page === 5 && (
-          <div className="card">
-            <h2 style={{ fontSize: 28, marginBottom: 12 }}>Твой подарок 🎁</h2>
-            <p className="subtitle" style={{ marginBottom: 24 }}>Маленький сюрприз для тебя</p>
-            <img src="qr.png" alt="QR-код" style={{ width: 200, height: 200, borderRadius: 16, boxShadow: "0 8px 24px rgba(0,0,0,0.1)" }} />
-            <p style={{ color: '#8b5e3c', marginTop: 16, fontSize: 14 }}>Отсканируй или нажми на кнопку ниже</p>
-            <a href={GIFT_URL} target="_blank" className="gift-btn">🎁 Открыть подарок</a>
-            <div className="nav-buttons" style={{ marginTop: 20 }}>
-              <button className="nav-btn" onClick={() => setPage(4)}>← Назад</button>
-            </div>
-          </div>
-        )}
+{page === 5 && (
+  <div className="card">
+    <h2 style={{ fontSize: 28, marginBottom: 12 }}>Твой подарок 🎁</h2>
+    <p className="subtitle" style={{ marginBottom: 20 }}>
+      Маленький сюрприз для тебя
+    </p>
+
+    {/* Картинка сертификата */}
+    <div style={{
+      background: "white",
+      borderRadius: 16,
+      padding: 20,
+      boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+      marginBottom: 20
+    }}>
+      <img 
+        src="certificate.png" 
+        alt="Сертификат Золотое Яблоко" 
+        style={{ width: "100%", borderRadius: 8 }}
+      />
+    </div>
+
+    <p style={{ 
+      color: '#b85c38', 
+      fontSize: 16, 
+      fontStyle: 'italic',
+      lineHeight: 1.5,
+      marginTop: 8
+    }}>
+      Сертификат уже отправился на твой телефон 📱<br/>
+      <span style={{ fontSize: 14, color: '#8b5e3c' }}>
+        Проверь СМС от Золотого Яблока
+      </span>
+    </p>
+
+    <div className="nav-buttons" style={{ marginTop: 20 }}>
+      <button className="nav-btn" onClick={() => setPage(4)}>← Назад</button>
+    </div>
+  </div>
+)}
       </div>
     );
   }
