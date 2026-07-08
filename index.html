@@ -376,13 +376,16 @@ h1, h2 {
   animation: firework 1.2s ease-out forwards;
 }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 
-const GIFT_URL = "https://goldapple.ru/ТВОЙ-СЕРТИФИКАТ";
 const PHOTOS = [
   { src: "photo1.jpg", caption: "Твоя улыбка здесь прекрасна" },
   { src: "photo2.jpg", caption: "Здесь мы были вместе, надеюсь поедем ещё " },
@@ -390,12 +393,13 @@ const PHOTOS = [
   { src: "photo4.jpg", caption: "А здесь монетку ищещь, но всё равно очень красивая" },
   { src: "photo5.jpg", caption: "Ну какой красивый взгляд 👀" },
   { src: "photo6.jpg", caption: "Улыбайся почаще, тебе очень идёт" },
+  { src: "photo7.jpg", caption: "Ты получила красный диплом! Круче тебя только Майкл Джексон" },
 ];
 
 const ALL_COMPLIMENTS = [
   "Ты — как будто солнце решило стать человеком ☀️",
   "Рядом с тобой даже воздух теплее",
-  "Ты делаешь этот мир родным и уютным",
+  "Ты делает этот мир родным и уютным",
   "Твой смех — это звук, от которого всё внутри улыбается",
   "Ты сильная, но при этом такая настоящая и живая",
   "С тобой можно быть собой — и это бесценно",
@@ -662,7 +666,6 @@ function App() {
     audioRef.current.volume = 0.4;
   }, []);
 
-  // Launch fireworks when reaching last page
   useEffect(() => {
     if (page === 5) {
       setFireworkActive(false);
@@ -888,39 +891,19 @@ function App() {
         </div>
       )}
 
-      {/* СТРАНИЦА 5 — Подарок + торт + отсчёт */}
+      {/* СТРАНИЦА 5 — Торт и отсчёт */}
       {page === 5 && (
         <div className="card">
-          <h2 style={{ fontSize: 28, marginBottom: 8 }}>Твой подарок 🎁</h2>
+          <h2 style={{ fontSize: 28, marginBottom: 16 }}>Загадай желание ✨</h2>
 
           {/* Торт со свечами */}
           <Cake />
-
-          {/* Сертификат */}
-          <div style={{
-            background: "white",
-            borderRadius: 16,
-            padding: 20,
-            boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
-            marginBottom: 12,
-            marginTop: 16,
-          }}>
-            <img
-              src="certificate.png"
-              alt="Сертификат Золотое Яблоко"
-              style={{ width: "100%", borderRadius: 8 }}
-            />
-          </div>
-          <p style={{ color: '#b85c38', fontSize: 15, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 12 }}>
-            Сертификат уже отправился на твой телефон 📱<br/>
-            <span style={{ fontSize: 13, color: '#8b5e3c' }}>Проверь СМС от Золотого Яблока</span>
-          </p>
 
           {/* Обратный отсчёт */}
           <Countdown />
 
           {/* Кнопки */}
-          <div className="nav-buttons" style={{ marginTop: 16, flexWrap: 'wrap' }}>
+          <div className="nav-buttons" style={{ marginTop: 24, flexWrap: 'wrap' }}>
             <button className="nav-btn" onClick={() => setPage(4)}>← Назад</button>
             <button className="finish-btn" onClick={handleFinish}>🎀 Завершить</button>
           </div>
@@ -930,10 +913,9 @@ function App() {
   );
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+// Новый способ рендеринга для React 18
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
 </script>
-<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
 </body>
 </html>
