@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Яна, с днём рождения! 🎂</title>
+<meta property="og:title" content="Яна, с днём рождения! 🎂">
+<meta property="og:description" content="Тёплые слова для тебя">
+<meta property="og:type" content="website">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', serif; overflow-x: hidden; }
+.container {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  padding: 20px;
+  background: linear-gradient(135deg, #fff5e6 0%, #ffe4c4 40%, #ffd4a8 100%);
+}
+.card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  border-radius: 30px;
+  padding: 40px 32px;
+  max-width: 460px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(180, 120, 60, 0.12);
+  animation: fadeIn 0.8s ease;
+  position: relative;
+  z-index: 10;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-100px) scale(1.4); opacity: 0; }
+}
+@keyframes envelopeOpen {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(0); opacity: 0; }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+@keyframes grow {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes flicker {
+  0%, 100% { opacity: 1; transform: scaleY(1) translateX(-50%); }
+  25% { opacity: 0.8; transform: scaleY(0.9) translateX(-48%); }
+  50% { opacity: 1; transform: scaleY(1.1) translateX(-52%); }
+  75% { opacity: 0.9; transform: scaleY(0.95) translateX(-50%); }
+}
+@keyframes firework {
+  0% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 1; }
+  60% { opacity: 1; }
+  100% { transform: translate(var(--tx2), var(--ty2)) scale(1); opacity: 0; }
+}
+@keyframes countdownPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+.petal {
+  position: fixed;
+  pointer-events: none;
+  animation: floatUp 4s ease-out forwards;
+  z-index: 1000;
+  font-size: 22px;
+}
+.envelope-container {
+  cursor: pointer;
+  font-size: 100px;
+  transition: transform 0.3s;
+  animation: pulse 2s infinite;
+  display: inline-block;
+}
+.envelope-container:hover { transform: scale(1.1); }
+.envelope-container.opening { animation: envelopeOpen 0.8s ease forwards; }
+h1, h2 {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  color: #b85c38;
+  line-height: 1.3;
+}
+.subtitle {
+  color: #8b5e3c;
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+.compliment {
+  animation: slideIn 0.6s ease both;
+  color: #6b3a2a;
+  font-style: italic;
+  font-size: 15px;
+  margin: 10px 0;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+}
+.photo-card {
+  background: white;
+  border-radius: 8px;
+  padding: 10px 10px 20px 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  margin: 16px auto;
+  max-width: 260px;
+  text-align: center;
+  min-height: 280px; /* Предотвращает прыжки интерфейса */
+}
+.photo-card img {
+  width: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+  max-height: 300px;
+}
+.photo-caption {
+  color: #8b5e3c;
+  font-style: italic;
+  font-size: 13px;
+  margin-top: 10px;
+}
+.nav-btn {
+  background: rgba(255, 255, 255, 0.6);
+  border: none;
+  color: #b85c38;
+  font-size: 16px;
+  padding: 10px 22px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: 'Georgia', serif;
+}
+.nav-btn:hover { background: rgba(255, 255, 255, 0.9); }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+.finish-btn {
+  background: linear-gradient(135deg, #d4845a, #b85c38);
+  border: none;
+  color: white;
+  font-size: 16px;
+  padding: 12px 28px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(184, 92, 56, 0.3);
+}
+.finish-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(184, 92, 56, 0.4);
+}
+.music-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  border: none;
+  font-size: 28px;
+  padding: 10px 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+.music-btn:hover { transform: scale(1.1); }
+.music-btn.playing { background: #ffe4c4; }
+.wheel {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: #f8e1c4;
+  border: 6px solid #d4845a;
+  margin: 0 auto 24px;
+  box-shadow: 0 8px 32px rgba(184, 92, 56, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+}
+.wheel-center {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 2;
+}
+.wheel-emoji {
+  position: absolute;
+  font-size: 20px;
+}
+.prediction-box {
+  margin-top: 24px;
+  padding: 20px 24px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 16px;
+  animation: fadeIn 0.8s ease;
+  box-shadow: 0 4px 16px rgba(184, 92, 56, 0.15);
+}
+.garden-bed {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+.garden-plot {
+  width: 55px;
+  height: 55px;
+  border-radius: 12px;
+  background: #8B6914;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.garden-plot:hover { transform: scale(1.1); background: #6B4F12; }
+.garden-plot.planted { cursor: default; background: #5C8A3C; }
+.garden-plot.planted:hover { transform: scale(1); }
+.garden-veg { animation: grow 0.6s ease; }
+.harvest-counter { color: #5C8A3C; font-size: 18px; font-weight: bold; margin: 12px 0; }
+.nav-buttons { display: flex; gap: 12px; justify-content: center; margin-top: 24px; }
+
+/* ТОРТ */
+.cake-container {
+  position: relative;
+  display: inline-block;
+  margin: 16px auto;
+  user-select: none;
+}
+.cake-emoji {
+  font-size: 80px;
+  display: block;
+  line-height: 1;
+}
+.candles-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: -8px;
+  position: relative;
+  z-index: 2;
+}
+.candle-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.candle-wrap:hover { transform: scale(1.15); }
+.candle-wrap.blown .flame { display: none; }
+.candle-wrap.blown .smoke {
+  display: block;
+}
+.flame {
+  font-size: 18px;
+  animation: flicker 0.7s ease-in-out infinite;
+  transform-origin: bottom center;
+  display: block;
+  position: relative;
+  left: 0;
+}
+.smoke {
+  display: none;
+  font-size: 14px;
+  opacity: 0.5;
+  animation: floatUp 2s ease-out forwards;
+}
+.candle-body {
+  font-size: 20px;
+  line-height: 1;
+}
+.candles-hint {
+  font-size: 13px;
+  color: #8b5e3c;
+  font-style: italic;
+  margin-top: 6px;
+}
+.all-blown-msg {
+  margin-top: 8px;
+  font-size: 15px;
+  color: #b85c38;
+  font-style: italic;
+  font-weight: bold;
+  animation: fadeIn 0.6s ease;
+}
+
+/* ОБРАТНЫЙ ОТСЧЁТ */
+.countdown-box {
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 20px;
+  padding: 16px 20px;
+  margin: 16px 0;
+  box-shadow: 0 4px 16px rgba(184, 92, 56, 0.1);
+  animation: countdownPulse 3s ease-in-out infinite;
+}
+.countdown-title {
+  color: #8b5e3c;
+  font-size: 13px;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+.countdown-units {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.countdown-unit {
+  background: linear-gradient(135deg, #d4845a, #b85c38);
+  color: white;
+  border-radius: 12px;
+  padding: 8px 12px;
+  min-width: 58px;
+  text-align: center;
+}
+.countdown-num {
+  font-size: 22px;
+  font-weight: bold;
+  font-family: 'Georgia', serif;
+  line-height: 1;
+}
+.countdown-label {
+  font-size: 10px;
+  opacity: 0.85;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ФЕЙЕРВЕРК */
+.firework-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 2000;
+  font-size: 20px;
+  animation: firework 1.2s ease-out forwards;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const PHOTOS = [
+  { src: "photo1.jpg", caption: "Твоя улыбка здесь прекрасна" },
+  { src: "photo2.jpg", caption: "Здесь мы были вместе, надеюсь поедем ещё " },
+  { src: "photo3.jpg", caption: "А это моя любимая твоя фотография, такая тут важная" },
+  { src: "photo4.jpg", caption: "А здесь монетку ищещь, но всё равно очень красивая" },
+  { src: "photo5.jpg", caption: "Ну какой красивый взгляд 👀" },
+  { src: "photo6.jpg", caption: "Улыбайся почаще, тебе очень идёт" },
+  { src: "photo7.jpg", caption: "Твой текст для новой фотографии" },
+];
+
+const ALL_COMPLIMENTS = [
+  "Ты — как будто солнце решило стать человеком ☀️",
+  "Рядом с тобой даже воздух теплее",
+  "Ты делаешь этот мир родным и уютным",
+  "Твой смех — это звук, от которого всё внутри улыбается",
+  "Ты сильная, но при этом такая настоящая и живая",
+  "С тобой можно быть собой — и это бесценно",
+  "Ты — тот человек, с которым душа отдыхает",
+  "Твоя доброта обволакивает, как мягкий плед",
+  "Ты слышишь не слова — ты слышишь сердце",
+  "Ты заслуживаешь всего самого светлого — и даже больше",
+  "Ты особенная, и не потому что лучше всех, а потому что ты — это ты",
+  "Ты приносишь счастье просто тем, что ты рядом",
+  "С тобой можно молчать, и это будет самый тёплый разговор",
+  "Ты умеешь превращать обычные дни в маленькие праздники души 🎉",
+  "Твои мысли и мечты — они настоящие, и это вдохновляет",
+  "Ты — как чашка горячего чая, когда на улице дождь, а внутри уют 🍵",
+  "Ты не боишься быть уязвимой, и в этом твоя сила",
+  "Ты поддерживаешь так, будто обнимаешь словами",
+  "Ты — человек, на которого можно опереться в любой шторм",
+  "С тобой любое приключение становится тёплым воспоминанием",
+  "Ты — как глоток свежего воздуха после долгого дня, только нежного 🌿",
+  "Ты щедрая душой — и это дороже любых подарков",
+  "Ты делаешь мир красивее одним своим присутствием",
+  "Ты — причина, по которой хочется верить в хорошее",
+  "Ты излучаешь спокойствие, в котором хочется остаться",
+  "Ты — тот самый друг, которого судьба дарит не каждому",
+  "Ты даже не представляешь, как много ты значишь для тех, кто тебя знает",
+  "Ты умеешь прощать так, будто заново даришь крылья",
+  "Ты — как звезда, которая горит даже в самую тёмную ночь 🌟",
+  "Ты всегда находишь нужные слова, и они ложатся прямо в сердце",
+  "Ты вдохновляешь не громкими делами, а тем, как ты живёшь каждый день",
+  "Ты — человек, которого хочется обнять мысленно и никогда не отпускать",
+  "Ты умеешь замечать красоту в мелочах, и это очень редкий и красивый дар ✨",
+  "Твой позитив способен разогнать любые тучи и поднять настроение в любой день 🌤️",
+  "В тебе есть удивительное сочетание жизненной мудрости и детской искренности",
+  "С тобой даже самые простые и привычные вещи становятся интересными",
+  "Ты умеешь вдохновлять людей вокруг просто тем, что остаёшься собой",
+  "У тебя потрясающее чувство юмора, которое всегда к месту и создаёт уют 😄",
+  "Твоя внутренняя энергия заряжает уверенностью и желанием двигаться вперёд",
+  "Ты из тех редких людей, чьё присутствие сразу снимает любое напряжение",
+  "В твоих глазах всегда горит какой-то особенный, очень добрый огонёк",
+  "Ты умеешь слушать так, что человек чувствует себя по-настоящему важным и услышанным 🤍",
+  "Твой внутренний компас всегда безошибочно указывает на то, что правильно и честно",
+  "Ты создаёшь вокруг себя атмосферу, в которой хочется улыбаться, творить и радоваться",
+  "В тебе столько жизни, характера и искры, что этим невозможно не восхищаться",
+  "Ты умеешь находить мудрый подход даже к самым запутанным ситуациям 🧭",
+  "Твоя честность, прямота и открытость — это то, что вызывает огромное уважение",
+  "Ты — как надёжный маяк, который светит спокойно, уверенно и очень тепло",
+  "Рядом с тобой чувствуешь себя в абсолютной безопасности, уюте и комфорте",
+  "Ты умеешь радоваться успехам других так искренне, как никто другой 🌟",
+  "Твой рассудительный взгляд на мир делает сложные вещи чуточку проще и понятнее",
+  "В тебе есть та редкая внутренняя сила, которая никогда не давит, а мягко поддерживает 🌿",
+];
+
+const PREDICTIONS = [
+  "Этот год принесёт тебе неожиданную встречу, которая всё изменит",
+  "Ты окажешься в нужном месте в нужное время — доверься судьбе",
+  "Тебя ждёт успех в том, о чём ты давно мечтала",
+  "Кто-то из прошлого вернётся с важными словами",
+  "Ты откроешь в себе талант, о котором не подозревала",
+  "Путешествие, о котором ты даже не думала, станет реальностью",
+  "Финансовая удача будет на твоей стороне этой осенью",
+  "Ты примешь смелое решение — и не пожалеешь",
+  "Весной случится то, что заставит тебя улыбаться каждый день",
+  "Ты получишь предложение, от которого невозможно отказаться",
+  "Новый человек войдёт в твою жизнь и станет важной её частью",
+  "Ты наконец-то завершишь то, что давно откладывала",
+  "Июль принесёт тебе судьбоносную новость",
+  "Ты обретёшь гармонию в том, что сейчас кажется хаосом",
+  "Твоя цель станет ближе, чем ты думаешь",
+  "Ты найдёшь ответ на вопрос, который мучает тебя давно",
+  "Ты встречатишь свою удачу там, где меньше всего ждёшь",
+  "Твоя доброта вернётся к тебе сторицей",
+  "Звёзды говорят: ты на правильном пути",
+  "Этот год — твой. Просто поверь в это",
+  "Случайная встреча этим летом перерастёт в нечто большее",
+  "Ты получишь весточку издалека, которая согреет сердце",
+  "К концу года ты будешь гордиться собой больше, чем когда-либо",
+  "Одно твоё давнее желание исполнится самым неожиданным образом",
+  "Ты встретишь человека, который посмотрит на мир твоими глазами",
+  "Осень подарит тебе момент, который ты запомнишь на всю жизнь",
+  "Ты решишься на то, что давно откладывала — и будешь счастлива",
+  "Финансовый сюрприз ждёт тебя в самый нужный момент",
+  "Твоя интуиция этой весной будет особенно сильной — слушай её",
+  "Ты получишь благодарность оттуда, откуда совсем не ждала",
+  "Новое хобби или увлечение откроется тебе в этом году",
+  "Ты станешь для кого-то настоящим ангелом-хранителем",
+  "Летний вечер принесёт тебе разговор, который всё расставит по местам",
+  "Ты обретёшь внутренний покой в том, что раньше тревожило",
+  "Твоя работа или увлечение принесут неожиданные плоды",
+  "Ты встретишь старого друга в самый подходящий момент",
+  "Твоя мечта детства напомнит о себе — и ты улыбнёшься",
+  "Ты получишь подарок от судьбы в виде счастливого случая",
+  "Твои слова однажды станут для кого-то спасением",
+  "Ты откроешь для себя новое место, которое станет твоим убежищем",
+  "Твоя забота о других вернётся к тебе в тройном размере",
+  "Ты примешь верное решение в самый сложный момент",
+  "Твоя улыбка в этом году будет видна гораздо чаще",
+  "Ты получишь знак от вселенной, который нельзя будет проигнорировать",
+  "Ты почувствуешь, что именно сейчас всё идёт как надо",
+  "Твоя смелость откроет перед тобой двери, которые раньше были закрыты",
+  "Ты обретёшь настоящего друга там, где искала совсем другое",
+  "Твои планы начнут сбываться одно за другим",
+  "Ты получишь поддержку в самый неожиданный момент",
+  "Ты поймёшь, что всё происходило не зря",
+  "Твоя доброта сделает чью-то жизнь немного светлее",
+  "Ты получишь то, о чём боялась даже мечтать",
+  "Твоя вера в лучшее будет вознаграждена",
+  "Ты окажешься там, где и должна быть",
+  "Твой совет однажды изменит чью-то судьбу",
+  "Ты поймаешь удачу за хвост в самый обычный день",
+  "Твоя искренность откроет тебе новые горизонты",
+  "Ты получишь неожиданное приглашение, которое нельзя отклонить",
+  "Твоё терпение наконец принесёт долгожданные плоды",
+  "Ты станешь свидетелем маленького чуда в своей жизни",
+  "Этот год подарит тебе внутреннюю лёгкость, которой так не хватало",
+  "Твои старания и упорный труд наконец-то оценят по достоинству",
+  "Впереди тебя ждёт день, который тебе захочется поставить на повтор",
+  "Маленькая спонтанная покупка принесёт тебе неожиданно много радости",
+  "Ты найдёшь неиссякаемый источник вдохновения в самых привычных вещах",
+  "Скоро появится отличный повод для искренней гордости за саму себя",
+  "Ближайшие месяцы принесут в твой дом долгожданный уют и умиротворение",
+  "Ты легко распутаешь узел проблемы, над которой давно ломала голову",
+  "Случайный короткий разговор поднимет тебе настроение на целую неделю",
+  "Одно самое обычное утро начнётся с потрясающих и добрых новостей",
+  "Ты поймаешь идеальный баланс между делами, отдыхом и заботой о себе",
+  "Судьба готовит для тебя очень комфортную, душевную и приятную поездку",
+  "Твоя светлая энергия поддержит близкого человека в нужную минуту",
+  "Отпусти все старые сомнения — впереди тебя ждут только ясные дни",
+  "Этот год наглядно покажет тебе, насколько ты сильная и удивительная",
+  "Ты найдёшь ясные ответы там, где раньше видела только туман",
+  "Тебя ждёт чудесный вечер в компании людей, которые тебя искренне ценят",
+  "Твоё небольшое увлечение перерастёт в нечто большее и принесёт успех",
+  "Каждая минута, вложенная тобой в себя, в этом году окупится вдвойне",
+  "Жизнь преподнесёт тебе классный и практичный сюрприз в самый обычный день",
+];
+
+const VEGETABLES = ["🥕", "🌽", "🍅", "🥒", "🧅", "🧄", "🍆", "🥬"];
+const FIREWORK_EMOJIS = ["🎆", "🎇", "✨", "🌟", "💫", "⭐", "🎉", "🎊", "🌸", "💖", "🌺", "🎈"];
+const PETALS = ["🌸", "🌷", "💐", "🌺", "🌼", "🌻", "✨"];
+
+const BIRTHDAY_NEXT = new Date("2027-07-09T00:00:00");
+
+function getCountdown() {
+  const now = new Date();
+  const diff = BIRTHDAY_NEXT - now;
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+  return { days, hours, minutes, seconds };
+}
+
+const getRandomCompliments = () => {
+  const shuffled = [...ALL_COMPLIMENTS].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 3);
+};
+
+function Typewriter({ text, speed = 50 }) {
+  const [displayedText, setDisplayedText] = useState("");
+  const [cursor, setCursor] = useState(true);
+  useEffect(() => {
+    let index = 0;
+    setDisplayedText("");
+    const timer = setInterval(() => {
+      if (index < text.length) {
+        setDisplayedText(text.slice(0, index + 1));
+        index++;
+      } else { clearInterval(timer); }
+    }, speed);
+    return () => clearInterval(timer);
+  }, [text, speed]);
+  useEffect(() => {
+    const cursorTimer = setInterval(() => setCursor(c => !c), 500);
+    return () => clearInterval(cursorTimer);
+  }, []);
+  return (
+    <p className="subtitle" style={{ fontStyle: 'italic', minHeight: 80 }}>
+      {displayedText}
+      <span style={{ opacity: cursor ? 1 : 0, color: '#b85c38', fontWeight: 'bold', transition: 'opacity 0.1s' }}>|</span>
+    </p>
+  );
+}
+
+function Countdown() {
+  const [time, setTime] = useState(getCountdown());
+  useEffect(() => {
+    const t = setInterval(() => setTime(getCountdown()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const pad = n => String(n).padStart(2, '0');
+  return (
+    <div className="countdown-box">
+      <p className="countdown-title">До следующего дня рождения 🎂 (09.07.2027)</p>
+      <div className="countdown-units">
+        {[
+          { num: time.days, label: "дней" },
+          { num: pad(time.hours), label: "часов" },
+          { num: pad(time.minutes), label: "минут" },
+          { num: pad(time.seconds), label: "секунд" },
+        ].map(({ num, label }) => (
+          <div key={label} className="countdown-unit">
+            <div className="countdown-num">{num}</div>
+            <div className="countdown-label">{label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Cake() {
+  const [blown, setBlown] = useState([false, false, false, false, false]);
+  const allBlown = blown.every(Boolean);
+  const blowCandle = (i) => {
+    if (blown[i]) return;
+    const next = [...blown];
+    next[i] = true;
+    setBlown(next);
+  };
+  return (
+    <div style={{ textAlign: 'center', margin: '8px 0' }}>
+      <div className="candles-row" style={{ marginBottom: 4 }}>
+        {blown.map((b, i) => (
+          <div key={i} className={`candle-wrap ${b ? 'blown' : ''}`} onClick={() => blowCandle(i)} title="Задуй свечу!">
+            <span className="flame">🔥</span>
+            <span className="smoke">💨</span>
+            <span className="candle-body">🕯️</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: 72, lineHeight: 1 }}>🎂</div>
+      {!allBlown && <p className="candles-hint">Нажми на каждую свечку, чтобы задуть 🌬️</p>}
+      {allBlown && (
+        <p className="all-blown-msg">🎉 Все свечи задуты! Загадай желание! ✨</p>
+      )}
+    </div>
+  );
+}
+
+function FireworkLayer({ active }) {
+  const [particles, setParticles] = useState([]);
+  useEffect(() => {
+    if (!active) return;
+    let count = 0;
+    const interval = setInterval(() => {
+      if (count >= 8) { clearInterval(interval); return; }
+      count++;
+      const batch = Array.from({ length: 12 }, (_, i) => ({
+        id: Date.now() + i + Math.random(),
+        x: 10 + Math.random() * 80,
+        y: 10 + Math.random() * 70,
+        emoji: FIREWORK_EMOJIS[Math.floor(Math.random() * FIREWORK_EMOJIS.length)],
+        tx: (Math.random() - 0.5) * 120,
+        ty: (Math.random() - 0.5) * 120,
+        tx2: (Math.random() - 0.5) * 200,
+        ty2: -60 - Math.random() * 100,
+      }));
+      setParticles(p => [...p, ...batch]);
+      setTimeout(() => setParticles(p => p.filter(x => !batch.find(b => b.id === x.id))), 1400);
+    }, 300);
+    return () => clearInterval(interval);
+  }, [active]);
+  return (
+    <>
+      {particles.map(p => (
+        <div
+          key={p.id}
+          className="firework-particle"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            '--tx': `${p.tx}px`,
+            '--ty': `${p.ty}px`,
+            '--tx2': `${p.tx2}px`,
+            '--ty2': `${p.ty2}px`,
+          }}
+        >
+          {p.emoji}
+        </div>
+      ))}
+    </>
+  );
+}
+
+function App() {
+  const [page, setPage] = useState(0);
+  const [envelopeOpen, setEnvelopeOpen] = useState(false);
+  const [showText, setShowText] = useState(false);
+  const [showCompliments, setShowCompliments] = useState([false, false, false]);
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const [petals, setPetals] = useState([]);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+  const [compliments] = useState(getRandomCompliments());
+  const [spinning, setSpinning] = useState(false);
+  const [prediction, setPrediction] = useState(null);
+  const [rotation, setRotation] = useState(0);
+  const [garden, setGarden] = useState(Array(6).fill(null));
+  const [harvestCount, setHarvestCount] = useState(0);
+  const [gardenComplete, setGardenComplete] = useState(false);
+  const [fireworkActive, setFireworkActive] = useState(false);
+  const audioRef = useRef(null);
+
+  // ОПТИМИЗАЦИЯ: Умный фоновый предзагрузчик картинок
+  useEffect(() => {
+    PHOTOS.forEach(photo => {
+      const img = new Image();
+      img.src = photo.src;
+    });
+  }, []);
+
+  useEffect(() => {
+    audioRef.current = new Audio("music.mp3");
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.4;
+  }, []);
+
+  useEffect(() => {
+    if (page === 5) {
+      setFireworkActive(false);
+      setTimeout(() => setFireworkActive(true), 300);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (petals.length < 20) {
+        const newPetal = {
+          id: Date.now(),
+          x: Math.random() * 90 + "%",
+          y: Math.random() * 80 + "%",
+          char: PETALS[Math.floor(Math.random() * PETALS.length)],
+        };
+        setPetals(p => [...p, newPetal]);
+        setTimeout(() => setPetals(p => p.filter(x => x.id !== newPetal.id)), 4000);
+      }
+    }, 600);
+    return () => clearInterval(interval);
+  }, [petals.length]);
+
+  useEffect(() => {
+    if (page === 1 && showText) {
+      const timers = [
+        setTimeout(() => setShowCompliments([true, false, false]), 500),
+        setTimeout(() => setShowCompliments([true, true, false]), 1500),
+        setTimeout(() => setShowCompliments([true, true, true]), 2500),
+      ];
+      return () => timers.forEach(t => clearTimeout(t));
+    }
+  }, [page, showText]);
+
+  function handleEnvelopeClick() {
+    if (audioRef.current) {
+      audioRef.current.play().catch(() => {});
+      setMusicPlaying(true);
+    }
+    setEnvelopeOpen(true);
+    setTimeout(() => setPage(1), 900);
+    setTimeout(() => setShowText(true), 1200);
+  }
+
+  function toggleMusic() {
+    if (!audioRef.current) return;
+    if (musicPlaying) {
+      audioRef.current.pause();
+      setMusicPlaying(false);
+    } else {
+      audioRef.current.play().catch(() => {});
+      setMusicPlaying(true);
+    }
+  }
+
+  function spinWheel() {
+    if (spinning) return;
+    setSpinning(true);
+    setPrediction(null);
+    const spins = 5 + Math.floor(Math.random() * 5);
+    const extraDegrees = Math.floor(Math.random() * 360);
+    const totalRotation = rotation + spins * 360 + extraDegrees;
+    setRotation(totalRotation);
+    setTimeout(() => {
+      const random = PREDICTIONS[Math.floor(Math.random() * PREDICTIONS.length)];
+      setPrediction(random);
+      setSpinning(false);
+    }, 3000);
+  }
+
+  function plantVegetable(index) {
+    if (garden[index] !== null || gardenComplete) return;
+    const newGarden = [...garden];
+    const randomVeg = VEGETABLES[Math.floor(Math.random() * VEGETABLES.length)];
+    newGarden[index] = randomVeg;
+    setGarden(newGarden);
+    const newCount = harvestCount + 1;
+    setHarvestCount(newCount);
+    if (newCount >= 6) setGardenComplete(true);
+  }
+
+  function handleFinish() {
+    window.location.reload();
+  }
+
+  return (
+    <div className="container">
+      {petals.map(p => (
+        <div key={p.id} className="petal" style={{ left: p.x, top: p.y }}>{p.char}</div>
+      ))}
+      <FireworkLayer active={fireworkActive} />
+      <button className={`music-btn ${musicPlaying ? 'playing' : ''}`} onClick={toggleMusic}>
+        {musicPlaying ? '🔊' : '🔈'}
+      </button>
+
+      {/* СТРАНИЦА 0 — Конверт */}
+      {page === 0 && (
+        <div className="card" style={{ background: 'transparent', boxShadow: 'none' }}>
+          <div className={`envelope-container ${envelopeOpen ? 'opening' : ''}`} onClick={handleEnvelopeClick}>
+            💌
+          </div>
+          <p style={{ color: '#8b5e3c', fontStyle: 'italic', marginTop: 16, fontSize: 18 }}>
+            Открой меня
+          </p>
+        </div>
+      )}
+
+      {/* СТРАНИЦА 1 — Поздравление */}
+      {page === 1 && (
+        <div className="card">
+          <h1 style={{ fontSize: 32, marginBottom: 12 }}>
+            Яна, с днём рождения! 🎂
+          </h1>
+          <Typewriter
+            text="Пусть этот день будет таким же тёплым и светлым, как ты сама. Желаю тебе счастья, удачи и только хороших людей вокруг."
+            speed={40}
+          />
+          {showText && (
+            <>
+              {showCompliments[0] && <p className="compliment">{compliments[0]}</p>}
+              {showCompliments[1] && <p className="compliment">{compliments[1]}</p>}
+              {showCompliments[2] && <p className="compliment">{compliments[2]}</p>}
+            </>
+          )}
+          <div className="nav-buttons">
+            <button className="nav-btn" onClick={() => { setPage(2); setShowCompliments([true, true, true]); }}>Дальше →</button>
+          </div>
+        </div>
+      )}
+
+      {/* СТРАНИЦА 2 — Галерея фото */}
+      {page === 2 && (
+        <div className="card">
+          <h2 style={{ fontSize: 26, marginBottom: 16 }}>Как прошёл этот год</h2>
+          <div className="photo-card">
+            {/* ОПТИМИЗАЦИЯ: key={photoIndex} мгновенно сбрасывает старую картинку */}
+            <img key={photoIndex} src={PHOTOS[photoIndex].src} alt="Фото" />
+            <p className="photo-caption">{PHOTOS[photoIndex].caption}</p>
+          </div>
+          <div style={{ display: "flex", gap: 20, justifyContent: "center", marginTop: 16 }}>
+            <button className="nav-btn" onClick={() => setPhotoIndex(Math.max(0, photoIndex - 1))} disabled={photoIndex === 0}>←</button>
+            <span style={{ color: '#8b5e3c', padding: '8px 0' }}>{photoIndex + 1} / {PHOTOS.length}</span>
+            <button className="nav-btn" onClick={() => setPhotoIndex(Math.min(PHOTOS.length - 1, photoIndex + 1))} disabled={photoIndex === PHOTOS.length - 1}>→</button>
+          </div>
+          <div className="nav-buttons">
+            <button className="nav-btn" onClick={() => setPage(1)}>← Назад</button>
+            <button className="nav-btn" onClick={() => setPage(3)}>Дальше →</button>
+          </div>
+        </div>
+      )}
+
+      {/* СТРАНИЦА 3 — Колесо предсказаний */}
+      {page === 3 && (
+        <div className="card">
+          <h2 style={{ fontSize: 26, marginBottom: 8 }}>Колесо предсказаний 🔮</h2>
+          <p className="subtitle" style={{ marginBottom: 24 }}>
+            Вселенная знает, что тебя ждёт...
+          </p>
+          <div
+            className="wheel"
+            onClick={spinWheel}
+            style={{ cursor: spinning ? "default" : "pointer", transform: `rotate(${rotation}deg)` }}
+          >
+            {["⭐", "🌟", "💫", "✨", "🔮", "🪐", "🌙", "☀️"].map((emoji, i) => (
+              <span key={i} className="wheel-emoji" style={{ transform: `rotate(${i * 45}deg) translateY(-75px)` }}>
+                {emoji}
+              </span>
+            ))}
+            <div className="wheel-center">🔮</div>
+          </div>
+          <p style={{ color: "#8b5e3c", fontSize: 14, marginBottom: 8 }}>
+            {spinning ? "Вселенная думает..." : "Нажми на колесо, чтобы узнать судьбу"}
+          </p>
+          {prediction && !spinning && (
+            <div className="prediction-box">
+              <p style={{ fontSize: 16, color: "#6b3a2a", fontStyle: "italic", lineHeight: 1.5 }}>
+                ✨ {prediction} ✨
+              </p>
+            </div>
+          )}
+          {prediction && !spinning && (
+            <button className="nav-btn" onClick={spinWheel} style={{ marginTop: 16, fontSize: 16, padding: '10px 24px' }}>
+              🔄 Крутить ещё раз
+            </button>
+          )}
+          <div className="nav-buttons">
+            <button className="nav-btn" onClick={() => setPage(2)}>← Назад</button>
+            <button className="nav-btn" onClick={() => setPage(4)}>Дальше →</button>
+          </div>
+        </div>
+      )}
+
+      {/* СТРАНИЦА 4 — Мини-огород */}
+      {page === 4 && (
+        <div className="card">
+          <h2 style={{ fontSize: 26, marginBottom: 8 }}>Посади свой урожай 🌱</h2>
+          <p className="subtitle" style={{ marginBottom: 24 }}>
+            Яна, посади овощи и собери урожай!
+          </p>
+          <div className="garden-bed">
+            {garden.map((veg, i) => (
+              <div key={i} className={`garden-plot ${veg ? 'planted' : ''}`} onClick={() => plantVegetable(i)}>
+                {veg ? <span className="garden-veg">{veg}</span> : "🟫"}
+              </div>
+            ))}
+          </div>
+          <p className="harvest-counter">
+            {gardenComplete
+              ? "🏆 Урожай собран! Ты настоящий агроном!"
+              : `Собрано: ${harvestCount}/6 🌾`}
+          </p>
+          {gardenComplete && (
+            <div className="prediction-box" style={{ marginTop: 16 }}>
+              <p style={{ fontSize: 16, color: "#6b3a2a", fontStyle: "italic", lineHeight: 1.5 }}>
+                Даже в день рождения ты думаешь об урожае! 😄<br/>
+                С таким агрономом никакой голод не страшен! 🌱🏆
+              </p>
+            </div>
+          )}
+          <div className="nav-buttons">
+            <button className="nav-btn" onClick={() => setPage(3)}>← Назад</button>
+            <button className="nav-btn" onClick={() => setPage(5)}>Дальше →</button>
+          </div>
+        </div>
+      )}
+
+      {/* СТРАНИЦА 5 — Торт и отсчёт */}
+      {page === 5 && (
+        <div className="card">
+          <h2 style={{ fontSize: 28, marginBottom: 16 }}>Загадай желание ✨</h2>
+
+          {/* Торт со свечами */}
+          <Cake />
+
+          {/* Обратный отсчёт */}
+          <Countdown />
+
+          {/* Кнопки */}
+          <div className="nav-buttons" style={{ marginTop: 24, flexWrap: 'wrap' }}>
+            <button className="nav-btn" onClick={() => setPage(4)}>← Назад</button>
+            <button className="finish-btn" onClick={handleFinish}>🎀 Завершить</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+</script>
+</body>
+</html>
